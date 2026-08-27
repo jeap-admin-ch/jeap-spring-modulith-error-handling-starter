@@ -1,0 +1,36 @@
+publiccodeYmlVersion: 0.4.0
+name: jeap-spring-modulith-error-handling-starter
+applicationSuite: jEAP
+softwareVersion: 1.0.0
+releaseDate: 2026-08-26
+url: "https://github.com/jeap-admin-ch/jeap-spring-modulith-error-handling-starter.git"
+landingURL: "https://github.com/jeap-admin-ch/jeap"
+platforms:
+  - web
+categories:
+  - application-development
+developmentStatus: development
+softwareType: library
+description:
+  en:
+    localisedName: jeap-spring-modulith-error-handling-starter
+    shortDescription: A Spring Boot starter for handling failed Spring Modulith event publications.
+    longDescription: >
+      The starter applies a persistent retry policy to Spring Modulith event publications and integrates exhausted
+      failures with the jEAP Error Handling Service. Operators can retry or discard an individual publication through
+      the existing error-handling workflow.
+    features:
+      - Persistent retries for failed Spring Modulith event publications.
+      - Escalation of exhausted publications to the jEAP Error Handling Service.
+      - Commands for retrying or discarding individual publications.
+legal:
+  license: Apache-2.0
+maintenance:
+  type: internal
+  contacts:
+    - name: Federal Office of Information Technology, Systems and Telecommunication FOITT
+      email: jeap-community@bit.admin.ch
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - en

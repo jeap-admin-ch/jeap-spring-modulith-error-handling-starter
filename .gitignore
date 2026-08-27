@@ -1,0 +1,11 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+*.iws
+*.iml
+*.ipr
+.idea/
+
+*.versionsBackup
+log.log
+.attach_pid*
