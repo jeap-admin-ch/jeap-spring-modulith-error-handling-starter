@@ -1,6 +1,8 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
 import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutbox;
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
@@ -9,13 +11,18 @@ import org.springframework.modulith.events.FailedEventPublications;
 import org.springframework.modulith.events.core.EventPublicationRepository;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 class ModulithErrorHandlingAutoConfigurationTest {
 
+    private final LockProvider applicationLockProvider = mock(LockProvider.class);
+
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(ModulithErrorHandlingAutoConfiguration.class))
+            .withBean("applicationLockProvider", LockProvider.class, () -> applicationLockProvider)
             .withBean(JdbcTemplate.class, () -> mock(JdbcTemplate.class))
             .withBean("jdbcEventPublicationRepository", EventPublicationRepository.class,
                     () -> mock(EventPublicationRepository.class))
@@ -33,6 +40,7 @@ class ModulithErrorHandlingAutoConfigurationTest {
     void enablesErrorHandlingByDefault() {
         contextRunner.run(context -> assertThat(context)
                 .hasSingleBean(ModulithErrorHandlingProperties.class)
+                .hasSingleBean(LockProvider.class)
                 .hasSingleBean(ModulithPublicationScheduler.class)
                 .hasSingleBean(ModulithPublicationCommandListener.class));
     }
@@ -43,5 +51,18 @@ class ModulithErrorHandlingAutoConfigurationTest {
                 .withPropertyValues("jeap.modulith.error-handling.enabled=false")
                 .run(context -> assertThat(context)
                         .doesNotHaveBean(ModulithErrorHandlingProperties.class));
+    }
+
+    @Test
+    void keepsExistingLockProvider() {
+        contextRunner.run(context -> assertThat(context).getBean(LockProvider.class).isSameAs(applicationLockProvider));
+    }
+
+    @Test
+    void createsJdbcLockProviderWhenApplicationDoesNotProvideOne() {
+        LockProvider lockProvider = new ModulithErrorHandlingAutoConfiguration()
+                .modulithErrorHandlingLockProvider(mock(DataSource.class));
+
+        assertThat(lockProvider).isInstanceOf(JdbcTemplateLockProvider.class);
     }
 }

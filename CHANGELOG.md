@@ -12,6 +12,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Add the initial starter and integration-test repository structure.
 - Add Spring Modulith 2.1 compatibility tests for failure interception and targeted resubmission behavior.
 - Add persistent retry and reconciliation for Spring Modulith JDBC v2 publications on PostgreSQL.
+- Coordinate retry and reconciliation jobs across application instances with ShedLock.
 - Add idempotent failure escalation through the jEAP transactional outbox.
 - Add UUID-exact retry and discard command handling.
 - Add PostgreSQL reference DDL for application-owned migrations.

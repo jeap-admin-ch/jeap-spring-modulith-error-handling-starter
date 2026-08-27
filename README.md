@@ -15,9 +15,9 @@ The first release targets Spring Modulith JDBC v2 with PostgreSQL.
 
 ## Status
 
-Retry, generation-based escalation through the transactional outbox, scheduled reconciliation and UUID-exact retry and
-discard command handling are implemented. Correctness is based on persistent PostgreSQL state; proactive failure
-observation only reduces escalation latency.
+Retry, generation-based escalation through the transactional outbox, ShedLock-coordinated reconciliation and UUID-exact
+retry and discard command handling are implemented. Correctness is based on persistent PostgreSQL state; proactive
+failure observation only reduces escalation latency.
 
 ## Documentation
 

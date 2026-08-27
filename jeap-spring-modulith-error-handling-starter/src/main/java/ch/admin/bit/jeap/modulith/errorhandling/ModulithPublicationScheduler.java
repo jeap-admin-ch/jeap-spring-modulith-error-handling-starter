@@ -1,12 +1,14 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
+import net.javacrumbs.shedlock.core.LockAssert;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.modulith.events.FailedEventPublications;
 import org.springframework.modulith.events.ResubmissionOptions;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Clock;
 
-final class ModulithPublicationScheduler {
+class ModulithPublicationScheduler {
 
     private final FailedEventPublications failedPublications;
     private final PublicationSelectionContext selectionContext;
@@ -30,14 +32,22 @@ final class ModulithPublicationScheduler {
     }
 
     @Scheduled(fixedDelayString = "${jeap.modulith.error-handling.retry-interval:30s}")
+    @SchedulerLock(name = "modulith-publication-retry",
+            lockAtLeastFor = "${jeap.modulith.error-handling.retry-lock-at-least:5s}",
+            lockAtMostFor = "${jeap.modulith.error-handling.retry-lock-at-most:5m}")
     void retryFailedPublications() {
+        LockAssert.assertLocked();
         selectionContext.retryable(() -> failedPublications.resubmit(ResubmissionOptions.defaults()
                 .withBatchSize(properties.getBatchSize())
                 .withMinAge(properties.getRetryMinAge())));
     }
 
     @Scheduled(fixedDelayString = "${jeap.modulith.error-handling.reconciliation-interval:5m}")
+    @SchedulerLock(name = "modulith-publication-reconciliation",
+            lockAtLeastFor = "${jeap.modulith.error-handling.reconciliation-lock-at-least:5s}",
+            lockAtMostFor = "${jeap.modulith.error-handling.reconciliation-lock-at-most:30m}")
     void reconcileExhaustedPublications() {
+        LockAssert.assertLocked();
         repository.findUnescalatedFailures(
                         properties.getMaxCompletionAttempts(),
                         clock.instant().minus(properties.getReconciliationMinAge()),

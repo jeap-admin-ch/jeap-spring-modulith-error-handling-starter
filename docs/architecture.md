@@ -17,6 +17,8 @@ Spring Modulith listener fails
 
 Correctness is based on persistent PostgreSQL state, atomic status transitions and idempotent command consumption. A
 scheduled reconciliation sweep is the source of truth; proactive listener-failure observation only reduces latency.
+ShedLock coordinates both scheduled retry and reconciliation across application instances. The database claims and
+generation key remain the final correctness guards if a lock expires during a long-running sweep.
 
 ## Spring Modulith integration constraints
 

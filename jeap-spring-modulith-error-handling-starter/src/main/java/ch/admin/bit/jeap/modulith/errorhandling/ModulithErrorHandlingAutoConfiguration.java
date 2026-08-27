@@ -1,11 +1,15 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
 import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutbox;
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.aop.Advisor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +24,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.Clock;
 
+import javax.sql.DataSource;
+
 /**
  * Auto-configuration entry point for Spring Modulith publication error handling.
  */
@@ -31,6 +37,7 @@ import java.time.Clock;
         matchIfMissing = true)
 @EnableConfigurationProperties(ModulithErrorHandlingProperties.class)
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "30m")
 public class ModulithErrorHandlingAutoConfiguration {
 
     /**
@@ -42,6 +49,15 @@ public class ModulithErrorHandlingAutoConfiguration {
     @Bean
     Clock modulithErrorHandlingClock() {
         return Clock.systemUTC();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(LockProvider.class)
+    LockProvider modulithErrorHandlingLockProvider(DataSource dataSource) {
+        return new JdbcTemplateLockProvider(JdbcTemplateLockProvider.Configuration.builder()
+                .withJdbcTemplate(new JdbcTemplate(dataSource))
+                .usingDbTime()
+                .build());
     }
 
     @Bean

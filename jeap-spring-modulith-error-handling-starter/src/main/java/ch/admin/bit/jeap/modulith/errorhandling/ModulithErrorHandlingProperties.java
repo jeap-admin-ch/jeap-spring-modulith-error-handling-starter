@@ -17,11 +17,19 @@ public class ModulithErrorHandlingProperties {
 
     private Duration retryInterval = Duration.ofSeconds(30);
 
+    private Duration retryLockAtLeast = Duration.ofSeconds(5);
+
+    private Duration retryLockAtMost = Duration.ofMinutes(5);
+
     private Duration retryMinAge = Duration.ofSeconds(30);
 
     private int maxCompletionAttempts = 3;
 
     private Duration reconciliationInterval = Duration.ofMinutes(5);
+
+    private Duration reconciliationLockAtLeast = Duration.ofSeconds(5);
+
+    private Duration reconciliationLockAtMost = Duration.ofMinutes(30);
 
     private Duration reconciliationMinAge = Duration.ofMinutes(1);
 
@@ -71,6 +79,22 @@ public class ModulithErrorHandlingProperties {
         this.retryInterval = retryInterval;
     }
 
+    public Duration getRetryLockAtLeast() {
+        return retryLockAtLeast;
+    }
+
+    public void setRetryLockAtLeast(Duration retryLockAtLeast) {
+        this.retryLockAtLeast = retryLockAtLeast;
+    }
+
+    public Duration getRetryLockAtMost() {
+        return retryLockAtMost;
+    }
+
+    public void setRetryLockAtMost(Duration retryLockAtMost) {
+        this.retryLockAtMost = retryLockAtMost;
+    }
+
     public Duration getRetryMinAge() {
         return retryMinAge;
     }
@@ -93,6 +117,22 @@ public class ModulithErrorHandlingProperties {
 
     public void setReconciliationInterval(Duration reconciliationInterval) {
         this.reconciliationInterval = reconciliationInterval;
+    }
+
+    public Duration getReconciliationLockAtLeast() {
+        return reconciliationLockAtLeast;
+    }
+
+    public void setReconciliationLockAtLeast(Duration reconciliationLockAtLeast) {
+        this.reconciliationLockAtLeast = reconciliationLockAtLeast;
+    }
+
+    public Duration getReconciliationLockAtMost() {
+        return reconciliationLockAtMost;
+    }
+
+    public void setReconciliationLockAtMost(Duration reconciliationLockAtMost) {
+        this.reconciliationLockAtMost = reconciliationLockAtMost;
     }
 
     public Duration getReconciliationMinAge() {
