@@ -6,7 +6,6 @@ import org.springframework.modulith.events.core.PublicationTargetIdentifier;
 import org.springframework.modulith.events.core.TargetEventPublication;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,13 +15,16 @@ final class DecoratingEventPublicationRepository implements EventPublicationRepo
     private final EventPublicationRepository delegate;
     private final PublicationFailureCaptureContext failureCapture;
     private final PublicationSelectionContext selection;
+    private final JdbcModulithPublicationRepository jdbcRepository;
 
     DecoratingEventPublicationRepository(EventPublicationRepository delegate,
             PublicationFailureCaptureContext failureCapture,
-            PublicationSelectionContext selection) {
+            PublicationSelectionContext selection,
+            JdbcModulithPublicationRepository jdbcRepository) {
         this.delegate = delegate;
         this.failureCapture = failureCapture;
         this.selection = selection;
+        this.jdbcRepository = jdbcRepository;
     }
 
     @Override
@@ -58,7 +60,10 @@ final class DecoratingEventPublicationRepository implements EventPublicationRepo
 
     @Override
     public boolean markResubmitted(UUID identifier, Instant resubmissionDate) {
-        return delegate.markResubmitted(identifier, resubmissionDate);
+        return selection.claim(identifier)
+                .map(claim -> jdbcRepository.markResubmitted(
+                        claim.generation(), resubmissionDate, claim.maxCompletionAttempts()))
+                .orElseGet(() -> delegate.markResubmitted(identifier, resubmissionDate));
     }
 
     @Override
@@ -99,12 +104,9 @@ final class DecoratingEventPublicationRepository implements EventPublicationRepo
 
     @Override
     public List<TargetEventPublication> findFailedPublications(FailedCriteria criteria) {
-        return selection.select(criteria).map(selectedIds -> {
-            var publicationsById = new HashMap<UUID, TargetEventPublication>();
-            delegate.findByStatus(Status.FAILED)
-                    .forEach(publication -> publicationsById.put(publication.getIdentifier(), publication));
-            return selectedIds.stream().map(publicationsById::get).filter(java.util.Objects::nonNull).toList();
-        }).orElseGet(() -> delegate.findFailedPublications(criteria));
+        return selection.select(criteria)
+                .map(jdbcRepository::findFailedPublications)
+                .orElseGet(() -> delegate.findFailedPublications(criteria));
     }
 
     @Override

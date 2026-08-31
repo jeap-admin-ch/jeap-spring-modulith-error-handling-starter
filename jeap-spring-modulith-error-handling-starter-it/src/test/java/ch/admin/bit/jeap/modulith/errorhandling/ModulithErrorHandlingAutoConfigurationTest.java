@@ -9,9 +9,12 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.modulith.events.FailedEventPublications;
 import org.springframework.modulith.events.core.EventPublicationRepository;
+import org.springframework.modulith.events.core.EventSerializer;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.time.Clock;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -28,7 +31,9 @@ class ModulithErrorHandlingAutoConfigurationTest {
                     () -> mock(EventPublicationRepository.class))
             .withBean(TransactionalOutbox.class, () -> mock(TransactionalOutbox.class))
             .withBean(FailedEventPublications.class, () -> mock(FailedEventPublications.class))
+            .withBean(EventSerializer.class, () -> mock(EventSerializer.class))
             .withBean(PlatformTransactionManager.class, () -> mock(PlatformTransactionManager.class))
+            .withBean(TaskScheduler.class, () -> mock(TaskScheduler.class))
             .withPropertyValues(
                     "spring.application.name=test-service",
                     "jeap.messaging.kafka.systemName=TEST",
@@ -64,5 +69,13 @@ class ModulithErrorHandlingAutoConfigurationTest {
                 .modulithErrorHandlingLockProvider(mock(DataSource.class));
 
         assertThat(lockProvider).isInstanceOf(JdbcTemplateLockProvider.class);
+    }
+
+    @Test
+    void keepsApplicationClock() {
+        Clock applicationClock = mock(Clock.class);
+
+        contextRunner.withBean(Clock.class, () -> applicationClock)
+                .run(context -> assertThat(context).getBean(Clock.class).isSameAs(applicationClock));
     }
 }

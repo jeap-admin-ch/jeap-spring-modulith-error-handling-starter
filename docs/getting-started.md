@@ -49,6 +49,10 @@ jeap:
 
 The application must declare a producer contract for `ModulithPublicationProcessingFailedEvent` and consumer
 contracts for `RetryModulithPublicationCommand` and `DiscardModulithPublicationCommand`, using the configured topics.
+Command producers must copy the failure event identity to `references.publication.failureEventId`. Although the field is
+nullable in Avro for schema evolution, the starter requires it for retry and discard actions. Commands without it, or
+commands for a stale generation, are acknowledged as no-ops. Consumer group IDs include the configured system and
+service name so applications sharing command topics each receive commands for target filtering.
 
 The retry and reconciliation jobs use separate ShedLock locks. `lock-at-least` prevents several application instances
 from running the same sweep one after another at startup, while `lock-at-most` releases a lock after an instance has

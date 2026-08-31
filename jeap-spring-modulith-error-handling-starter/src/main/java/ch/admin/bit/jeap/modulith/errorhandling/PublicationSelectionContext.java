@@ -3,8 +3,11 @@ package ch.admin.bit.jeap.modulith.errorhandling;
 import org.springframework.modulith.events.core.EventPublicationRepository.FailedCriteria;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 final class PublicationSelectionContext {
 
@@ -19,27 +22,34 @@ final class PublicationSelectionContext {
     }
 
     void retryable(Runnable action) {
-        runWith(new Selection(null), action);
+        runWith(new Selection(null, properties.getMaxCompletionAttempts()), action);
     }
 
-    void exact(UUID publicationId, Runnable action) {
-        runWith(new Selection(publicationId), action);
+    void exact(PublicationGeneration generation, Runnable action) {
+        runWith(new Selection(generation, null), action);
     }
 
-    Optional<List<UUID>> select(FailedCriteria criteria) {
+    Optional<List<PublicationGeneration>> select(FailedCriteria criteria) {
         Selection current = selection.get();
         if (current == null) {
             return Optional.empty();
         }
-        if (current.publicationId != null) {
-            return Optional.of(repository.findFailed(current.publicationId)
-                    .map(PublicationFailure::publicationId)
-                    .stream().toList());
+        List<PublicationGeneration> selected = current.exact == null
+                ? repository.findRetryable(properties.getMaxCompletionAttempts(),
+                        criteria.getPublicationDateReference(), criteria.getMaxItemsToRead())
+                : List.of(current.exact);
+        current.selected = selected.stream().collect(Collectors.toMap(
+                PublicationGeneration::publicationId, Function.identity()));
+        return Optional.of(selected);
+    }
+
+    Optional<Claim> claim(UUID publicationId) {
+        Selection current = selection.get();
+        if (current == null) {
+            return Optional.empty();
         }
-        return Optional.of(repository.findRetryableIds(
-                properties.getMaxCompletionAttempts(),
-                criteria.getPublicationDateReference(),
-                criteria.getMaxItemsToRead()));
+        return Optional.ofNullable(current.selected.get(publicationId))
+                .map(generation -> new Claim(generation, current.maxCompletionAttempts));
     }
 
     private void runWith(Selection requested, Runnable action) {
@@ -56,6 +66,17 @@ final class PublicationSelectionContext {
         }
     }
 
-    private record Selection(UUID publicationId) {
+    record Claim(PublicationGeneration generation, Integer maxCompletionAttempts) {
+    }
+
+    private static final class Selection {
+        private final PublicationGeneration exact;
+        private final Integer maxCompletionAttempts;
+        private Map<UUID, PublicationGeneration> selected = Map.of();
+
+        private Selection(PublicationGeneration exact, Integer maxCompletionAttempts) {
+            this.exact = exact;
+            this.maxCompletionAttempts = maxCompletionAttempts;
+        }
     }
 }

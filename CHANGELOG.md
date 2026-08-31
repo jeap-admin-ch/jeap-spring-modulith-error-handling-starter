@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Make retry claims generation-aware and enforce the automatic retry limit in the atomic update.
+- Bind retry and discard commands to the current escalation event and acknowledge stale, duplicate or tokenless commands
+  as no-ops.
+- Lock and reload the exact failed generation before transactional escalation.
+- Load only selected failed publications and reuse an application-provided `Clock`.
+- Scope command consumer groups to the configured application service.
+
 ## [1.0.0] - 2026-08-26
 
 ### Added

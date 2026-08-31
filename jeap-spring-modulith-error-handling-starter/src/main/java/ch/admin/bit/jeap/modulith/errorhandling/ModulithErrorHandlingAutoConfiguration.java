@@ -19,6 +19,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.modulith.events.FailedEventPublications;
 import org.springframework.modulith.events.config.EventPublicationAutoConfiguration;
 import org.springframework.modulith.events.core.EventPublicationRepository;
+import org.springframework.modulith.events.core.EventSerializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -47,6 +48,7 @@ public class ModulithErrorHandlingAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(Clock.class)
     Clock modulithErrorHandlingClock() {
         return Clock.systemUTC();
     }
@@ -67,8 +69,8 @@ public class ModulithErrorHandlingAutoConfiguration {
 
     @Bean
     JdbcModulithPublicationRepository jdbcModulithPublicationRepository(
-            JdbcTemplate jdbcTemplate, ModulithErrorHandlingProperties properties) {
-        return new JdbcModulithPublicationRepository(jdbcTemplate, properties);
+            JdbcTemplate jdbcTemplate, EventSerializer eventSerializer, ModulithErrorHandlingProperties properties) {
+        return new JdbcModulithPublicationRepository(jdbcTemplate, eventSerializer, properties);
     }
 
     @Bean
@@ -82,8 +84,10 @@ public class ModulithErrorHandlingAutoConfiguration {
     EventPublicationRepository modulithErrorHandlingEventPublicationRepository(
             @Qualifier("jdbcEventPublicationRepository") EventPublicationRepository delegate,
             PublicationFailureCaptureContext failureCaptureContext,
-            PublicationSelectionContext selectionContext) {
-        return new DecoratingEventPublicationRepository(delegate, failureCaptureContext, selectionContext);
+            PublicationSelectionContext selectionContext,
+            JdbcModulithPublicationRepository jdbcRepository) {
+        return new DecoratingEventPublicationRepository(delegate, failureCaptureContext, selectionContext,
+                jdbcRepository);
     }
 
     @Bean

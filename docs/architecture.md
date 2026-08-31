@@ -15,7 +15,8 @@ Spring Modulith listener fails
   -> starter changes exactly the referenced publication
 ```
 
-Correctness is based on persistent PostgreSQL state, atomic status transitions and idempotent command consumption. A
+Correctness is based on persistent PostgreSQL state, generation-aware atomic status transitions and idempotent command
+consumption. A
 scheduled reconciliation sweep is the source of truth; proactive listener-failure observation only reduces latency.
 ShedLock coordinates both scheduled retry and reconciliation across application instances. The database claims and
 generation key remain the final correctness guards if a lock expires during a long-running sweep.
@@ -31,8 +32,10 @@ The implementation uses only public Spring Modulith APIs, but cannot implement i
   is consequently neither a read-only inspection API nor suitable for an escalation sweep that must leave rows failed.
 
 The starter therefore uses a PostgreSQL/JDBC v2 adapter for policy-aware selection and atomic state changes. Retry
-commands claim exactly one `FAILED` publication by UUID. The scheduled sweep selects retryable and exhausted rows in
-SQL so that its batch limit applies only after the retry policy has been evaluated.
+commands claim exactly one `FAILED` publication by UUID, completion-attempt generation and escalation event ID. Missing,
+stale and duplicate command tokens are acknowledged without changing the publication. Manual retries may exceed the
+automatic retry limit. The scheduled sweep selects retryable and exhausted rows in SQL so that its batch limit applies
+only after the retry policy has been evaluated, then claims the selected generation with the retry limit in the update.
 
 For the low-latency failure path, an outer listener advisor retains the thrown exception while Spring Modulith's
 `CompletionRegisteringAdvisor` performs the state transition. A primary `EventPublicationRepository` decorator
@@ -41,4 +44,5 @@ the exact publication identifier without depending on package-private JDBC imple
 
 Escalation is recorded by publication identifier and completion-attempt generation. A manually retried publication
 that fails again has a higher generation and therefore produces a new operational error, while repeated observation
-of the same generation remains idempotent.
+of the same generation remains idempotent. The exact failed generation is locked and reloaded in the escalation
+transaction before the escalation record and outbox message are created.

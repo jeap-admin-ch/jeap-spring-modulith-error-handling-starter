@@ -41,23 +41,28 @@ final class ModulithPublicationEscalationService {
     }
 
     void escalate(UUID publicationId, Throwable exception) {
-        repository.findFailed(publicationId)
+        transactionTemplate.executeWithoutResult(status -> repository.lockFailed(publicationId)
                 .filter(failure -> failure.completionAttempts() >= properties.getMaxCompletionAttempts())
-                .ifPresent(failure -> escalate(failure, exception));
+                .ifPresent(failure -> recordEscalation(failure, exception)));
     }
 
     void escalate(PublicationFailure failure, Throwable exception) {
-        transactionTemplate.executeWithoutResult(status -> {
-            var event = new ModulithPublicationFailureEventBuilder(
-                    systemName, serviceName, failure, exception, properties).build();
-            String eventId = event.getIdentity().getEventId();
-            if (!repository.recordEscalation(failure, eventId, clock.instant())) {
-                return;
-            }
-            outbox.sendMessage(event, properties.getFailureEventTopic());
-            LOG.info("Escalated failed Modulith publication {} generation {} as event {}.",
-                    failure.publicationId(), failure.completionAttempts(), eventId);
-        });
+        transactionTemplate.executeWithoutResult(status -> repository
+                .lockFailed(failure.publicationId(), failure.completionAttempts())
+                .filter(current -> current.completionAttempts() >= properties.getMaxCompletionAttempts())
+                .ifPresent(current -> recordEscalation(current, exception)));
+    }
+
+    private void recordEscalation(PublicationFailure failure, Throwable exception) {
+        var event = new ModulithPublicationFailureEventBuilder(
+                systemName, serviceName, failure, exception, properties).build();
+        String eventId = event.getIdentity().getEventId();
+        if (!repository.recordEscalation(failure, eventId, clock.instant())) {
+            return;
+        }
+        outbox.sendMessage(event, properties.getFailureEventTopic());
+        LOG.info("Escalated failed Modulith publication {} generation {} as event {}.",
+                failure.publicationId(), failure.completionAttempts(), eventId);
     }
 
     private static void validateProperties(ModulithErrorHandlingProperties properties) {
