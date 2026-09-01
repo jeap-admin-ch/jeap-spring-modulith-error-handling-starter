@@ -5,18 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Fixed
-
-- Make retry claims generation-aware and enforce the automatic retry limit in the atomic update.
-- Bind retry and discard commands to the current escalation event and acknowledge stale, duplicate or tokenless commands
-  as no-ops.
-- Lock and reload the exact failed generation before transactional escalation.
-- Load only selected failed publications and reuse an application-provided `Clock`.
-- Scope command consumer groups to the configured application service.
-
-## [1.0.0] - 2026-08-26
+## [1.0.0] - 2026-09-01
 
 ### Added
 
@@ -27,3 +16,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Add idempotent failure escalation through the jEAP transactional outbox.
 - Add UUID-exact retry and discard command handling.
 - Add PostgreSQL reference DDL for application-owned migrations.
+- Make retry claims generation-aware and enforce the automatic retry limit atomically.
+- Bind commands to the current escalation event so stale, duplicate and tokenless commands are safe no-ops.
+- Lock and reload the exact failed generation before transactional escalation.
+- Load only selected failed publications and reuse an application-provided `Clock`.
+- Scope command consumer groups to the configured application service.

@@ -4,6 +4,8 @@ This repository provides the Spring Boot starter that connects failed Spring Mod
 Error Handling Service. It applies an application-owned retry policy, reports exhausted publications and consumes
 commands that retry or discard an individual publication.
 
+The starter is part of the [jEAP](https://github.com/jeap-admin-ch/jeap) platform.
+
 The first release targets Spring Modulith JDBC v2 with PostgreSQL.
 
 ## Modules

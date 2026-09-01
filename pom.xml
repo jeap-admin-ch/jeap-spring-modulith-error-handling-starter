@@ -16,7 +16,7 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>jEAP Spring Boot starter for handling failed Spring Modulith event publications.</description>
-    <url>https://github.com/jeap-admin-ch/jeap-spring-modulith-error-handling-starter</url>
+    <url>https://github.com/jeap-admin-ch/jeap-spring-modulith-error-handling-starter/tree/main</url>
 
     <scm>
         <url>https://github.com/jeap-admin-ch/jeap-spring-modulith-error-handling-starter.git</url>
