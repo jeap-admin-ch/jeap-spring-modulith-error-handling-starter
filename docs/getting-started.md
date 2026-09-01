@@ -42,7 +42,7 @@ jeap:
       reconciliation-min-age: 1m
       batch-size: 100
       max-payload-bytes: 262144
-      failure-event-topic: my-system-messageprocessing-failed
+      failure-event-topic: my-system-modulith-publication-processing-failed
       retry-command-topic: my-system-my-service-retry-modulith-publication
       discard-command-topic: my-system-my-service-discard-modulith-publication
 ```
