@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: modulith-error-handling-it
+  flyway:
+    # The starter does not use Flyway. The schema of these tests comes from the reference DDL below,
+    # and a consuming service owns its own migrations.
+    enabled: false
+  modulith:
+    events:
+      jdbc:
+        # Spring Modulith creates event_publication itself; the starter's own tables come from the
+        # reference DDL below.
+        schema-initialization:
+          enabled: true
+      # Keep failed publications in the registry so a failed listener leaves a row to operate on.
+      completion-mode: update
+      # Recovery has to go through the starter so the retry budget is applied. Modulith's startup
+      # republisher would invoke every incomplete publication and bypass it.
+      republish-outstanding-events-on-restart: false
+  sql:
+    init:
+      mode: always
+      # The very DDL this repository ships to consumers, copied onto the test classpath by the build.
+      # Running it here is what keeps it honest.
+      schema-locations: classpath:postgresql-reference-ddl.sql
+jeap:
+  messaging:
+    transactional-outbox:
+      # Exercise immediate post-commit delivery while keeping background relay jobs out of deterministic tests.
+      scheduled-relay-enabled: false
+  modulith:
+    error-handling:
+      max-completion-attempts: 3
+      # An hour, so neither job ever fires on its own: the tests trigger them explicitly to keep the
+      # attempt counts deterministic.
+      retry-interval: 1h
+      retry-initial-delay: 1h
+      reconciliation-interval: 1h
+      reconciliation-initial-delay: 1h
+      # No minimum age or lock-at-least, so consecutive explicit triggers are not skipped.
+      retry-min-age: 0s
+      retry-lock-at-least: 0s
+      reconciliation-min-age: 0s
+      reconciliation-lock-at-least: 0s
+      failure-event-topic: test-modulith-publication-processing-failed
+      retry-command-topic: test-retry-modulith-publication
+      discard-command-topic: test-discard-modulith-publication
+
+logging:
+  level:
+    ch.admin.bit.jeap.modulith.errorhandling: DEBUG

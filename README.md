@@ -6,14 +6,16 @@ commands that retry or discard an individual publication.
 
 The starter is part of the [jEAP](https://github.com/jeap-admin-ch/jeap) platform.
 
-The first release targets Spring Modulith JDBC v2 with PostgreSQL.
+The first release targets Spring Modulith JDBC v2 with PostgreSQL. It handles persistent `AFTER_COMMIT` publications
+for asynchronous `@ApplicationModuleListener` methods and synchronous `@TransactionalEventListener` methods that run
+in a `REQUIRES_NEW` transaction.
 
 ## Modules
 
 | Module | Purpose |
 |---|---|
 | `jeap-spring-modulith-error-handling-starter` | Auto-configuration and the application-side error-handling integration. |
-| `jeap-spring-modulith-error-handling-starter-it` | Integration tests for the starter's Spring Boot, PostgreSQL and messaging integration. |
+| `jeap-spring-modulith-error-handling-starter-it` | Integration tests running a real Spring Modulith application with PostgreSQL, the transactional outbox, and Kafka. |
 
 ## Status
 

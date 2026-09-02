@@ -33,10 +33,12 @@ jeap:
     error-handling:
       max-completion-attempts: 3
       retry-interval: 30s
+      retry-initial-delay: 0s
       retry-lock-at-least: 5s
       retry-lock-at-most: 5m
       retry-min-age: 30s
       reconciliation-interval: 5m
+      reconciliation-initial-delay: 0s
       reconciliation-lock-at-least: 5s
       reconciliation-lock-at-most: 30m
       reconciliation-min-age: 1m
@@ -54,10 +56,36 @@ nullable in Avro for schema evolution, the starter requires it for retry and dis
 commands for a stale generation, are acknowledged as no-ops. Consumer group IDs include the configured system and
 service name so applications sharing command topics each receive commands for target filtering.
 
+`max-completion-attempts` counts the attempts Spring Modulith records on the publication, and the **first invocation of
+the listener is already attempt one**. A value of `3` therefore means one initial attempt plus two automatic retries,
+after which the publication is escalated. A retry requested by an operator is applied regardless of this limit.
+
+The starter handles persistent `AFTER_COMMIT` listeners in either of these forms:
+
+```java
+@ApplicationModuleListener
+void on(OrderCompleted event) {
+    // Runs asynchronously in a transaction supplied by Spring Modulith.
+}
+
+@TransactionalEventListener
+@Transactional(propagation = Propagation.REQUIRES_NEW)
+void on(PaymentCompleted event) {
+    // Runs synchronously after commit in an independent transaction.
+}
+```
+
+The synchronous form blocks the publishing thread until it finishes. `REQUIRES_NEW` is required because the original
+transaction has committed while its resources can still be bound during the callback. Plain `@EventListener` methods
+and transaction phases other than `AFTER_COMMIT` do not create Spring Modulith publications and are not handled. Events
+must be published in an active thread-bound transaction. If `spring.modulith.events.registry-trigger-annotation` is set,
+it must include the annotation used by the listener. See [architecture.md](architecture.md#supported-listeners).
+
 The retry and reconciliation jobs use separate ShedLock locks. `lock-at-least` prevents several application instances
 from running the same sweep one after another at startup, while `lock-at-most` releases a lock after an instance has
 failed. Set each maximum above the longest expected execution time. The starter reuses an application-provided
-`LockProvider` or creates a PostgreSQL JDBC provider that uses database time.
+`LockProvider` or creates a PostgreSQL JDBC provider that uses database time. The initial delays default to zero, so
+both jobs run immediately after startup unless configured otherwise.
 
 ## Database
 

@@ -17,6 +17,8 @@ public class ModulithErrorHandlingProperties {
 
     private Duration retryInterval = Duration.ofSeconds(30);
 
+    private Duration retryInitialDelay = Duration.ZERO;
+
     private Duration retryLockAtLeast = Duration.ofSeconds(5);
 
     private Duration retryLockAtMost = Duration.ofMinutes(5);
@@ -26,6 +28,8 @@ public class ModulithErrorHandlingProperties {
     private int maxCompletionAttempts = 3;
 
     private Duration reconciliationInterval = Duration.ofMinutes(5);
+
+    private Duration reconciliationInitialDelay = Duration.ZERO;
 
     private Duration reconciliationLockAtLeast = Duration.ofSeconds(5);
 
@@ -79,6 +83,14 @@ public class ModulithErrorHandlingProperties {
         this.retryInterval = retryInterval;
     }
 
+    public Duration getRetryInitialDelay() {
+        return retryInitialDelay;
+    }
+
+    public void setRetryInitialDelay(Duration retryInitialDelay) {
+        this.retryInitialDelay = retryInitialDelay;
+    }
+
     public Duration getRetryLockAtLeast() {
         return retryLockAtLeast;
     }
@@ -117,6 +129,14 @@ public class ModulithErrorHandlingProperties {
 
     public void setReconciliationInterval(Duration reconciliationInterval) {
         this.reconciliationInterval = reconciliationInterval;
+    }
+
+    public Duration getReconciliationInitialDelay() {
+        return reconciliationInitialDelay;
+    }
+
+    public void setReconciliationInitialDelay(Duration reconciliationInitialDelay) {
+        this.reconciliationInitialDelay = reconciliationInitialDelay;
     }
 
     public Duration getReconciliationLockAtLeast() {

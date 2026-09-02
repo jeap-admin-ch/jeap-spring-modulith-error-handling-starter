@@ -20,6 +20,7 @@ Apache License Version 2.0
  * ch.admin.bit.jeap:jeap-messaging-glue-schema-registry - [ch.admin.bit.jeap:jeap-messaging-glue-schema-registry](https://github.com/jeap-admin-ch/jeap-messaging/tree/main/jeap-messaging-glue-schema-registry)
  * ch.admin.bit.jeap:jeap-messaging-infrastructure - [ch.admin.bit.jeap:jeap-messaging-infrastructure](https://github.com/jeap-admin-ch/jeap-messaging/tree/main/jeap-messaging-infrastructure)
  * ch.admin.bit.jeap:jeap-messaging-infrastructure-kafka - [ch.admin.bit.jeap:jeap-messaging-infrastructure-kafka](https://github.com/jeap-admin-ch/jeap-messaging/tree/main/jeap-messaging-infrastructure-kafka)
+ * ch.admin.bit.jeap:jeap-messaging-infrastructure-kafka-test - [ch.admin.bit.jeap:jeap-messaging-infrastructure-kafka-test](https://github.com/jeap-admin-ch/jeap-messaging/tree/main/jeap-messaging-infrastructure-kafka-test)
  * ch.admin.bit.jeap:jeap-messaging-model - [ch.admin.bit.jeap:jeap-messaging-model](https://github.com/jeap-admin-ch/jeap-messaging/tree/main/jeap-messaging-model)
  * ch.admin.bit.jeap:jeap-messaging-outbox - [ch.admin.bit.jeap:jeap-messaging-outbox](https://github.com/jeap-admin-ch/jeap-messaging-outbox/tree/main/jeap-messaging-outbox)
  * ch.admin.bit.jeap:jeap-spring-boot-roles-anywhere-starter - [ch.admin.bit.jeap:jeap-spring-boot-roles-anywhere-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-roles-anywhere-starter/tree/main/jeap-spring-boot-roles-anywhere-starter)
@@ -27,12 +28,17 @@ Apache License Version 2.0
  * ch.admin.bit.jeap.messagetype.jeap:discard-modulith-publication-command - [ch.admin.bit.jeap.messagetype.jeap:discard-modulith-publication-command](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
  * ch.admin.bit.jeap.messagetype.jeap:modulith-publication-processing-failed-event - [ch.admin.bit.jeap.messagetype.jeap:modulith-publication-processing-failed-event](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
  * ch.admin.bit.jeap.messagetype.jeap:retry-modulith-publication-command - [ch.admin.bit.jeap.messagetype.jeap:retry-modulith-publication-command](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
+ * com.dynatrace.hash4j:hash4j - [com.dynatrace.hash4j:hash4j](https://github.com/dynatrace-oss/hash4j)
  * Jackson-annotations - [com.fasterxml.jackson.core:jackson-annotations](https://github.com/FasterXML/jackson)
  * Jackson-core - [com.fasterxml.jackson.core:jackson-core](https://github.com/FasterXML/jackson-core)
  * jackson-databind - [com.fasterxml.jackson.core:jackson-databind](https://github.com/FasterXML/jackson)
  * Jackson-dataformat-CSV - [com.fasterxml.jackson.dataformat:jackson-dataformat-csv](https://github.com/FasterXML/jackson-dataformats-text)
+ * Jackson-dataformat-YAML - [com.fasterxml.jackson.dataformat:jackson-dataformat-yaml](https://github.com/FasterXML/jackson-dataformats-text)
  * Jackson datatype: jdk8 - [com.fasterxml.jackson.datatype:jackson-datatype-jdk8](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jdk8)
  * Caffeine cache - [com.github.ben-manes.caffeine:caffeine](https://github.com/ben-manes/caffeine)
+ * docker-java-api - [com.github.docker-java:docker-java-api](https://github.com/docker-java/docker-java)
+ * docker-java-transport - [com.github.docker-java:docker-java-transport](https://github.com/docker-java/docker-java)
+ * docker-java-transport-zerodep - [com.github.docker-java:docker-java-transport-zerodep](https://github.com/docker-java/docker-java)
  * proto-google-common-protos - [com.google.api.grpc:proto-google-common-protos](https://github.com/googleapis/java-iam/proto-google-common-protos)
  * FindBugs-jsr305 - [com.google.code.findbugs:jsr305](http://findbugs.sourceforge.net/)
  * Gson - [com.google.code.gson:gson](https://github.com/google/gson)
@@ -44,11 +50,17 @@ Apache License Version 2.0
  * Jimfs - [com.google.jimfs:jimfs](https://github.com/google/jimfs/jimfs)
  * json-path - [com.jayway.jsonpath:json-path](https://github.com/jayway/JsonPath)
  * ArchUnit - [com.tngtech.archunit:archunit](https://github.com/TNG/ArchUnit)
+ * scala-logging - [com.typesafe.scala-logging:scala-logging_2.13](https://github.com/lightbend/scala-logging)
  * JSON library from Android SDK - [com.vaadin.external.google:android-json](http://developer.android.com/sdk)
+ * Metrics Core Library - [com.yammer.metrics:metrics-core](http://metrics.codahale.com/metrics-core/)
  * HikariCP - [com.zaxxer:HikariCP](https://github.com/brettwooldridge/HikariCP)
+ * Apache Commons BeanUtils - [commons-beanutils:commons-beanutils](https://commons.apache.org/proper/commons-beanutils)
  * Apache Commons Codec - [commons-codec:commons-codec](https://commons.apache.org/proper/commons-codec/)
+ * Apache Commons Collections - [commons-collections:commons-collections](http://commons.apache.org/collections/)
+ * Commons Digester - [commons-digester:commons-digester](http://commons.apache.org/digester/)
  * Apache Commons IO - [commons-io:commons-io](https://commons.apache.org/proper/commons-io/)
  * Apache Commons Logging - [commons-logging:commons-logging](https://commons.apache.org/proper/commons-logging/)
+ * Apache Commons Validator - [commons-validator:commons-validator](https://commons.apache.org/proper/commons-validator/)
  * utils - [io.confluent:common-utils](https://confluent.io/common-utils)
  * kafka-avro-serializer - [io.confluent:kafka-avro-serializer](http://confluent.io/kafka-avro-serializer)
  * kafka-avro-types - [io.confluent:kafka-avro-types](http://confluent.io/kafka-avro-types)
@@ -62,6 +74,7 @@ Apache License Version 2.0
  * Jakarta Dependency Injection - [jakarta.inject:jakarta.inject-api](https://github.com/eclipse-ee4j/injection-api)
  * Byte Buddy (without dependencies) - [net.bytebuddy:byte-buddy](https://bytebuddy.net/byte-buddy)
  * Byte Buddy agent - [net.bytebuddy:byte-buddy-agent](https://bytebuddy.net/byte-buddy-agent)
+ * Java Native Access - [net.java.dev.jna:jna](https://github.com/java-native-access/jna)
  * net.javacrumbs.shedlock:shedlock-core - [net.javacrumbs.shedlock:shedlock-core](https://github.com/lukas-krecan/ShedLock/shedlock-core)
  * net.javacrumbs.shedlock:shedlock-provider-jdbc-template - [net.javacrumbs.shedlock:shedlock-provider-jdbc-template](https://github.com/lukas-krecan/ShedLock/providers/jdbc/shedlock-provider-jdbc-template)
  * net.javacrumbs.shedlock:shedlock-spring - [net.javacrumbs.shedlock:shedlock-spring](https://github.com/lukas-krecan/ShedLock/spring/shedlock-spring)
@@ -78,17 +91,37 @@ Apache License Version 2.0
  * Apache HttpComponents Core HTTP/1.1 - [org.apache.httpcomponents.core5:httpcore5](https://hc.apache.org/httpcomponents-core-5.4.x/5.4.3/httpcore5/)
  * Apache HttpComponents Core HTTP/2 - [org.apache.httpcomponents.core5:httpcore5-h2](https://hc.apache.org/httpcomponents-core-5.4.x/5.4.3/httpcore5-h2/)
  * Apache Kafka - [org.apache.kafka:kafka-clients](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-coordinator-common](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-group-coordinator](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-group-coordinator-api](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-metadata](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-raft](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-server](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-server-common](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-share-coordinator](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-storage](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-storage-api](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-streams](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-streams-test-utils](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-test-common-internal-api](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-test-common-runtime](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-tools-api](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka-transaction-coordinator](https://kafka.apache.org)
+ * Apache Kafka - [org.apache.kafka:kafka_2.13](https://kafka.apache.org)
  * Apache Log4j API - [org.apache.logging.log4j:log4j-api](https://logging.apache.org/log4j/2.x/)
+ * Apache Log4j Core - [org.apache.logging.log4j:log4j-core](https://logging.apache.org/log4j/2.x/)
  * Log4j API to SLF4J Adapter - [org.apache.logging.log4j:log4j-to-slf4j](https://logging.apache.org/log4j/2.x/)
  * org.apiguardian:apiguardian-api - [org.apiguardian:apiguardian-api](https://github.com/apiguardian-team/apiguardian)
  * AssertJ Core - [org.assertj:assertj-core](https://assertj.github.io/doc/#assertj-core)
  * Awaitility - [org.awaitility:awaitility](http://awaitility.org)
+ * jose4j - [org.bitbucket.b_c:jose4j](https://bitbucket.org/b_c/jose4j/)
  * flyway-core - [org.flywaydb:flyway-core](https://flywaydb.org/flyway-core)
  * Hibernate Models - [org.hibernate.models:hibernate-models](https://github.com/hibernate/hibernate-models)
  * Hibernate ORM - hibernate-core - [org.hibernate.orm:hibernate-core](https://hibernate.org/orm)
  * Javassist - [org.javassist:javassist](http://www.javassist.org/)
  * JBoss Logging 3 - [org.jboss.logging:jboss-logging](https://www.jboss.org)
  * IntelliJ IDEA Annotations - [org.jetbrains:annotations](http://www.jetbrains.org)
+ * JetBrains Java Annotations - [org.jetbrains:annotations](https://github.com/JetBrains/java-annotations)
  * Kotlin Reflect - [org.jetbrains.kotlin:kotlin-reflect](https://kotlinlang.org/)
  * Kotlin Stdlib - [org.jetbrains.kotlin:kotlin-stdlib](https://kotlinlang.org/)
  * Kotlin Stdlib Jdk7 - [org.jetbrains.kotlin:kotlin-stdlib-jdk7](https://kotlinlang.org/)
@@ -100,6 +133,8 @@ Apache License Version 2.0
  * Objenesis - [org.objenesis:objenesis](http://objenesis.org/objenesis)
  * org.opentest4j:opentest4j - [org.opentest4j:opentest4j](https://github.com/ota4j-team/opentest4j)
  * Reflections - [org.reflections:reflections](http://github.com/ronmamo/reflections)
+ * Scala Library - [org.scala-lang:scala-library](https://www.scala-lang.org/)
+ * Scala Reflect - [org.scala-lang:scala-reflect](https://www.scala-lang.org/)
  * JSONassert - [org.skyscreamer:jsonassert](https://github.com/skyscreamer/JSONassert)
  * JCL 1.2 implemented over SLF4J - [org.slf4j:jcl-over-slf4j](http://www.slf4j.org)
  * Spring AOP - [org.springframework:spring-aop](https://github.com/spring-projects/spring-framework)
@@ -128,15 +163,18 @@ Apache License Version 2.0
  * spring-boot-starter - [org.springframework.boot:spring-boot-starter](https://spring.io/projects/spring-boot)
  * spring-boot-starter-data-jpa - [org.springframework.boot:spring-boot-starter-data-jpa](https://spring.io/projects/spring-boot)
  * spring-boot-starter-jdbc - [org.springframework.boot:spring-boot-starter-jdbc](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-kafka - [org.springframework.boot:spring-boot-starter-kafka](https://spring.io/projects/spring-boot)
  * spring-boot-starter-logging - [org.springframework.boot:spring-boot-starter-logging](https://spring.io/projects/spring-boot)
  * spring-boot-starter-test - [org.springframework.boot:spring-boot-starter-test](https://spring.io/projects/spring-boot)
  * spring-boot-test - [org.springframework.boot:spring-boot-test](https://spring.io/projects/spring-boot)
  * spring-boot-test-autoconfigure - [org.springframework.boot:spring-boot-test-autoconfigure](https://spring.io/projects/spring-boot)
+ * spring-boot-testcontainers - [org.springframework.boot:spring-boot-testcontainers](https://spring.io/projects/spring-boot)
  * spring-boot-transaction - [org.springframework.boot:spring-boot-transaction](https://spring.io/projects/spring-boot)
  * Spring Cloud Context - [org.springframework.cloud:spring-cloud-context](https://projects.spring.io/spring-cloud/spring-cloud-context/)
  * Spring Data Core - [org.springframework.data:spring-data-commons](https://spring.io/projects/spring-data)
  * Spring Data JPA - [org.springframework.data:spring-data-jpa](https://projects.spring.io/spring-data-jpa)
  * Spring Kafka Support - [org.springframework.kafka:spring-kafka](https://github.com/spring-projects/spring-kafka)
+ * Spring Kafka Test Support - [org.springframework.kafka:spring-kafka-test](https://github.com/spring-projects/spring-kafka)
  * Spring Modulith - API - [org.springframework.modulith:spring-modulith-api](https://spring.io/projects/spring-modulith/spring-modulith-api)
  * Spring Modulith - APT - [org.springframework.modulith:spring-modulith-apt](https://spring.io/projects/spring-modulith/spring-modulith-apt)
  * Spring Modulith - Core - [org.springframework.modulith:spring-modulith-core](https://spring.io/projects/spring-modulith/spring-modulith-core)
@@ -203,6 +241,8 @@ BSD 2-Clause License
 -------------------------------
 
  * zstd-jni - [com.github.luben:zstd-jni](https://github.com/luben/zstd-jni)
+ * HdrHistogram - [org.hdrhistogram:HdrHistogram](http://hdrhistogram.github.io/HdrHistogram/)
+ * PostgreSQL JDBC Driver - [org.postgresql:postgresql](https://jdbc.postgresql.org)
 
 BSD License 3
 -------------------------------
@@ -248,6 +288,7 @@ Eclipse Public License v2.0
  * JUnit Jupiter Params - [org.junit.jupiter:junit-jupiter-params](https://junit.org/)
  * JUnit Platform Commons - [org.junit.platform:junit-platform-commons](https://junit.org/)
  * JUnit Platform Engine API - [org.junit.platform:junit-platform-engine](https://junit.org/)
+ * JUnit Platform Launcher - [org.junit.platform:junit-platform-launcher](https://junit.org/)
 
 GNU General Public License, version 2 (GPL2), with the classpath exception
 -------------------------------
@@ -258,6 +299,7 @@ GNU General Public License, version 2 (GPL2), with the classpath exception
 Go License
 -------------------------------
 
+ * RE2/J - [com.google.re2j:re2j](http://github.com/google/re2j)
  * RE2/J - [com.google.re2j:re2j](http://github.com/google/re2j)
 
 LGPL 2.1
@@ -271,24 +313,42 @@ LGPL-2.1-only
  * Logback Classic Module - [ch.qos.logback:logback-classic](http://logback.qos.ch/logback-classic)
  * Logback Core Module - [ch.qos.logback:logback-core](http://logback.qos.ch/logback-core)
 
+LGPL-2.1-or-later
+-------------------------------
+
+ * Java Native Access - [net.java.dev.jna:jna](https://github.com/java-native-access/jna)
+
 MIT License
 -------------------------------
 
  * minimal-json - [com.eclipsesource.minimal-json:minimal-json](https://github.com/ralfstx/minimal-json)
  * ClassGraph - [io.github.classgraph:classgraph](https://github.com/classgraph/classgraph)
  * Logstash Logback Encoder - [net.logstash.logback:logstash-logback-encoder](https://github.com/logfellow/logstash-logback-encoder)
+ * JOpt Simple - [net.sf.jopt-simple:jopt-simple](http://jopt-simple.github.io/jopt-simple)
+ * argparse4j - [net.sourceforge.argparse4j:argparse4j](http://argparse4j.github.io)
  * Checker Qual - [org.checkerframework:checker-qual](https://checkerframework.org/)
  * mockito-core - [org.mockito:mockito-core](https://github.com/mockito/mockito)
  * mockito-junit-jupiter - [org.mockito:mockito-junit-jupiter](https://github.com/mockito/mockito)
+ * PCollections - [org.pcollections:pcollections](https://github.com/hrldcpr/pcollections)
  * Project Lombok - [org.projectlombok:lombok](https://projectlombok.org)
  * reactive-streams - [org.reactivestreams:reactive-streams](http://www.reactive-streams.org/)
+ * Duct Tape - [org.rnorth.duct-tape:duct-tape](https://github.com/rnorth/duct-tape)
  * JUL to SLF4J bridge - [org.slf4j:jul-to-slf4j](http://www.slf4j.org)
  * SLF4J API Module - [org.slf4j:slf4j-api](http://www.slf4j.org)
+ * Testcontainers Core - [org.testcontainers:testcontainers](https://java.testcontainers.org)
+ * Testcontainers :: Database-Commons - [org.testcontainers:testcontainers-database-commons](https://java.testcontainers.org)
+ * Testcontainers :: JDBC - [org.testcontainers:testcontainers-jdbc](https://java.testcontainers.org)
+ * Testcontainers :: JDBC :: PostgreSQL - [org.testcontainers:testcontainers-postgresql](https://java.testcontainers.org)
 
 MPL 1.1
 -------------------------------
 
  * Javassist - [org.javassist:javassist](http://www.javassist.org/)
+
+Public Domain
+-------------------------------
+
+ * HdrHistogram - [org.hdrhistogram:HdrHistogram](http://hdrhistogram.github.io/HdrHistogram/)
 
 WTFPL
 -------------------------------

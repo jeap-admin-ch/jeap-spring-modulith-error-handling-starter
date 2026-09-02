@@ -3,6 +3,27 @@
 The starter runs inside the application that owns the Spring Modulith `event_publication` table. It is separate from the
 jEAP Error Handling Service, which stores operational errors in its own database.
 
+## Supported listeners
+
+Version 1 supports persistent Spring Modulith `AFTER_COMMIT` publications for both execution models:
+
+- asynchronous methods annotated with `@ApplicationModuleListener`, Spring Modulith's shortcut for
+  `@Async @Transactional(REQUIRES_NEW) @TransactionalEventListener`;
+- synchronous methods annotated with `@TransactionalEventListener` and
+  `@Transactional(propagation = REQUIRES_NEW)`.
+
+A synchronous listener blocks the publishing thread until its after-commit execution finishes. The publisher's business
+transaction is already committed, and Spring's transaction synchronization logs rather than propagates a listener
+failure. The listener needs `REQUIRES_NEW` because the committed publisher transaction's resources can still be bound
+during the callback; joining those resources would not provide a transaction in which listener changes can safely
+commit. Immediate escalation uses `REQUIRES_NEW` for the same reason.
+
+Plain `@EventListener` methods and `@TransactionalEventListener` methods in phases other than `AFTER_COMMIT` are not
+stored by Spring Modulith's event publication registry and are therefore outside this starter's scope. A plain listener
+runs in the publishing call and its failure retains normal Spring semantics, including rollback of the publishing
+transaction. Events must be published in an active thread-bound transaction, and
+`spring.modulith.events.registry-trigger-annotation` must not exclude supported synchronous listeners.
+
 The implemented flow is:
 
 ```text

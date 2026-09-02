@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
@@ -33,6 +34,8 @@ final class ModulithPublicationEscalationService {
         this.outbox = outbox;
         this.properties = properties;
         this.transactionTemplate = new TransactionTemplate(transactionManager);
+        // A synchronous AFTER_COMMIT listener still has the already-completed publisher transaction's resources bound.
+        this.transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         this.clock = clock;
         this.systemName = environment.getRequiredProperty("jeap.messaging.kafka.systemName");
         this.serviceName = environment.getProperty("jeap.messaging.kafka.serviceName",

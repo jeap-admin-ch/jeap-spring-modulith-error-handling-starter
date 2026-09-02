@@ -2,14 +2,17 @@ package ch.admin.bit.jeap.modulith.errorhandling;
 
 import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutbox;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 
 import java.time.Clock;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -37,6 +40,11 @@ class ModulithPublicationEscalationServiceTest {
 
         service.escalate(stale, null);
 
+        ArgumentCaptor<TransactionDefinition> transactionDefinition =
+                ArgumentCaptor.forClass(TransactionDefinition.class);
+        verify(transactionManager).getTransaction(transactionDefinition.capture());
+        assertThat(transactionDefinition.getValue().getPropagationBehavior())
+                .isEqualTo(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         verify(repository, never()).recordEscalation(any(), any(), any());
         verify(outbox, never()).sendMessage(any(), any());
     }

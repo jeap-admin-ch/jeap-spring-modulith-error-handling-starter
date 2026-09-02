@@ -31,7 +31,8 @@ class ModulithPublicationScheduler {
         this.clock = clock;
     }
 
-    @Scheduled(fixedDelayString = "${jeap.modulith.error-handling.retry-interval:30s}")
+    @Scheduled(fixedDelayString = "${jeap.modulith.error-handling.retry-interval:30s}",
+            initialDelayString = "${jeap.modulith.error-handling.retry-initial-delay:0s}")
     @SchedulerLock(name = "modulith-publication-retry",
             lockAtLeastFor = "${jeap.modulith.error-handling.retry-lock-at-least:5s}",
             lockAtMostFor = "${jeap.modulith.error-handling.retry-lock-at-most:5m}")
@@ -42,7 +43,8 @@ class ModulithPublicationScheduler {
                 .withMinAge(properties.getRetryMinAge())));
     }
 
-    @Scheduled(fixedDelayString = "${jeap.modulith.error-handling.reconciliation-interval:5m}")
+    @Scheduled(fixedDelayString = "${jeap.modulith.error-handling.reconciliation-interval:5m}",
+            initialDelayString = "${jeap.modulith.error-handling.reconciliation-initial-delay:0s}")
     @SchedulerLock(name = "modulith-publication-reconciliation",
             lockAtLeastFor = "${jeap.modulith.error-handling.reconciliation-lock-at-least:5s}",
             lockAtMostFor = "${jeap.modulith.error-handling.reconciliation-lock-at-most:30m}")
