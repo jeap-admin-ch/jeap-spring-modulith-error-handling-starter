@@ -1,8 +1,10 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
-import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutboxException;
+import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.DeferredMessageRepository;
 import ch.admin.bit.jeap.modulith.event.publicationprocessingfailed.ModulithPublicationProcessingFailedEvent;
 import org.junit.jupiter.api.Test;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import java.util.Map;
 import java.util.UUID;
@@ -10,12 +12,17 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 
 /**
  * Escalation is the point where the starter hands a failure to the Error Handling Service. It has to happen
  * exactly once per generation, and the escalation record and the outbox message have to be written together.
  */
 class ModulithPublicationEscalationIT extends ModulithErrorHandlingITBase {
+
+    @MockitoSpyBean
+    private DeferredMessageRepository deferredMessageRepository;
 
     @Test
     void exhaustedPublicationIsEscalatedOnceWithTheFailureEventTheOperatorNeeds() {
@@ -75,16 +82,13 @@ class ModulithPublicationEscalationIT extends ModulithErrorHandlingITBase {
     void failedOutboxSendRollsBackTheEscalationRecord() {
         UUID publicationId = insertFailedPublication(
                 "some.other.Listener.on(java.lang.Object)", properties.getMaxCompletionAttempts());
-        String configuredFailureEventTopic = properties.getFailureEventTopic();
-        properties.setFailureEventTopic("test-uncontracted-modulith-publication-processing-failed");
+        doThrow(new IllegalStateException("simulated outbox failure"))
+                .when(deferredMessageRepository).save(any());
 
-        try {
-            assertThatThrownBy(() -> escalationService.escalate(publicationId, null))
-                    .isInstanceOf(TransactionalOutboxException.class)
-                    .hasMessageContaining("Contract validation");
-        } finally {
-            properties.setFailureEventTopic(configuredFailureEventTopic);
-        }
+        assertThatThrownBy(() -> escalationService.escalate(publicationId, null))
+                .isInstanceOf(InvalidDataAccessApiUsageException.class)
+                .hasRootCauseInstanceOf(IllegalStateException.class)
+                .hasRootCauseMessage("simulated outbox failure");
 
         assertThat(escalationCount()).isZero();
         assertThat(outboxMessages()).isEmpty();

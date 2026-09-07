@@ -49,8 +49,9 @@ jeap:
       discard-command-topic: my-system-my-service-discard-modulith-publication
 ```
 
-The application must declare a producer contract for `ModulithPublicationProcessingFailedEvent` and consumer
-contracts for `RetryModulithPublicationCommand` and `DiscardModulithPublicationCommand`, using the configured topics.
+The failure event and retry/discard commands are framework-owned infrastructure messages. The starter handles their
+contract-validation exemptions, so the application only needs to configure the topics and does not declare contracts
+for these three message types. Contract declarations are still required for application-owned business messages.
 Command producers must copy the failure event identity to `references.publication.failureEventId`. Although the field is
 nullable in Avro for schema evolution, the starter requires it for retry and discard actions. Commands without it, or
 commands for a stale generation, are acknowledged as no-ops. Consumer group IDs include the configured system and

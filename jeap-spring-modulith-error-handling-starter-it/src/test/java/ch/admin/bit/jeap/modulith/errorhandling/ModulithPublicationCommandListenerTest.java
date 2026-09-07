@@ -117,7 +117,7 @@ class ModulithPublicationCommandListenerTest {
     }
 
     @Test
-    void listenerConsumerGroupsAreApplicationSpecific() throws Exception {
+    void listenerConsumerGroupsAreApplicationSpecificAndContractExempt() throws Exception {
         Method retry = ModulithPublicationCommandListener.class.getDeclaredMethod(
                 "retry", RetryModulithPublicationCommand.class, Acknowledgment.class);
         Method discard = ModulithPublicationCommandListener.class.getDeclaredMethod(
@@ -127,6 +127,10 @@ class ModulithPublicationCommandListenerTest {
                 .contains("jeap.messaging.kafka.systemName", "spring.application.name");
         assertThat(discard.getAnnotation(KafkaListener.class).groupId())
                 .contains("jeap.messaging.kafka.systemName", "spring.application.name");
+        assertThat(retry.getAnnotation(KafkaListener.class).properties())
+                .containsExactly("consumerContractInterceptor.exemptFromConsumerContractCheck=true");
+        assertThat(discard.getAnnotation(KafkaListener.class).properties())
+                .containsExactly("consumerContractInterceptor.exemptFromConsumerContractCheck=true");
     }
 
     private static RetryModulithPublicationCommand retryCommand(UUID publicationId, String failureEventId) {
