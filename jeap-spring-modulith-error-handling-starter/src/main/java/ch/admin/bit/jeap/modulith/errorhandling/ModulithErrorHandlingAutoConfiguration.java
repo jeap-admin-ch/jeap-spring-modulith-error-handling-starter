@@ -1,6 +1,9 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
+import ch.admin.bit.jeap.messaging.kafka.contract.ContractsValidator;
 import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutbox;
+import ch.admin.bit.jeap.modulith.command.discardpublication.DiscardModulithPublicationCommand;
+import ch.admin.bit.jeap.modulith.command.retrypublication.RetryModulithPublicationCommand;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
@@ -125,7 +128,11 @@ public class ModulithErrorHandlingAutoConfiguration {
             FailedEventPublications failedPublications,
             PublicationSelectionContext selectionContext,
             JdbcModulithPublicationRepository repository,
-            Clock modulithErrorHandlingClock) {
+            Clock modulithErrorHandlingClock,
+            ContractsValidator contractsValidator,
+            ModulithErrorHandlingProperties properties) {
+        contractsValidator.ensureConsumerContract(RetryModulithPublicationCommand.TypeRef.MESSAGE_TYPE_NAME, properties.getRetryCommandTopic());
+        contractsValidator.ensureConsumerContract(DiscardModulithPublicationCommand.TypeRef.MESSAGE_TYPE_NAME, properties.getDiscardCommandTopic());
         return new ModulithPublicationCommandListener(failedPublications, selectionContext, repository,
                 modulithErrorHandlingClock);
     }

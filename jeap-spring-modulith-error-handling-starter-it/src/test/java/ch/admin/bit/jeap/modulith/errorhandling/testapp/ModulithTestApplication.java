@@ -1,5 +1,8 @@
 package ch.admin.bit.jeap.modulith.errorhandling.testapp;
 
+import ch.admin.bit.jeap.messaging.annotations.JeapMessageConsumerContract;
+import ch.admin.bit.jeap.modulith.command.discardpublication.DiscardModulithPublicationCommand;
+import ch.admin.bit.jeap.modulith.command.retrypublication.RetryModulithPublicationCommand;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
@@ -11,5 +14,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * package private types.
  */
 @SpringBootApplication
+@JeapMessageConsumerContract(appName = "modulith-error-handling-it",
+        value = RetryModulithPublicationCommand.TypeRef.class,
+        topic = "test-retry-modulith-publication")
+@JeapMessageConsumerContract(appName = "modulith-error-handling-it",
+        value = DiscardModulithPublicationCommand.TypeRef.class,
+        topic = "test-discard-modulith-publication")
 public class ModulithTestApplication {
 }

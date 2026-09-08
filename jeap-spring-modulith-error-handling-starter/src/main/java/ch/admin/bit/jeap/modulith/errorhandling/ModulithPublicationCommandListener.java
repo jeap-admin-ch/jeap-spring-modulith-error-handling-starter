@@ -35,8 +35,7 @@ final class ModulithPublicationCommandListener {
 
     @KafkaListener(id = "jeap-modulith-publication-retry",
             groupId = CONSUMER_GROUP_PREFIX + "-jeap-modulith-publication-retry",
-            topics = "${jeap.modulith.error-handling.retry-command-topic}",
-            properties = "consumerContractInterceptor.exemptFromConsumerContractCheck=true")
+            topics = "${jeap.modulith.error-handling.retry-command-topic}")
     void retry(RetryModulithPublicationCommand command, Acknowledgment acknowledgment) {
         UUID publicationId = UUID.fromString(command.getReferences().getPublication().getPublicationId());
         String failureEventId = command.getReferences().getPublication().getFailureEventId();
@@ -53,8 +52,7 @@ final class ModulithPublicationCommandListener {
 
     @KafkaListener(id = "jeap-modulith-publication-discard",
             groupId = CONSUMER_GROUP_PREFIX + "-jeap-modulith-publication-discard",
-            topics = "${jeap.modulith.error-handling.discard-command-topic}",
-            properties = "consumerContractInterceptor.exemptFromConsumerContractCheck=true")
+            topics = "${jeap.modulith.error-handling.discard-command-topic}")
     void discard(DiscardModulithPublicationCommand command, Acknowledgment acknowledgment) {
         UUID publicationId = UUID.fromString(command.getReferences().getPublication().getPublicationId());
         String failureEventId = command.getReferences().getPublication().getFailureEventId();

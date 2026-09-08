@@ -9,7 +9,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Handle contract-validation exemptions for the framework-owned failure event and retry/discard commands.
+- Require explicit retry/discard consumer contracts and validate their configured topics at application startup.
+- Use the Messaging producer exemption for framework-owned failure events, verified through the real transactional
+  outbox without a failure-event producer contract.
 
 ## [1.3.0] - 2026-09-05
 
