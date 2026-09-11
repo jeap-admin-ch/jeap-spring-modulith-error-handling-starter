@@ -14,6 +14,82 @@ Add the starter to an application that uses Spring Modulith JDBC v2 with Postgre
 The jEAP Spring Boot parent will manage the released starter version once the starter has been added to its dependency
 management.
 
+## Kafka topics and service responsibilities
+
+Provision the topics and grant access before deploying the application. Reuse the system's existing Error Handling
+Service (EHS), running a version with Modulith support. No separate EHS instance is required for each Modulith service.
+The names below are examples: use your system's naming convention and keep configuration and contracts consistent.
+A shared failure topic per system and separate retry/discard topics per source service make ownership explicit.
+
+| Example topic | Message type | Producer | Consumer |
+|---|---|---|---|
+| `my-system-modulith-publication-processing-failed` | `ModulithPublicationProcessingFailedEvent` | Modulith application, through the starter's outbox | EHS |
+| `my-system-my-service-retry-modulith-publication` | `RetryModulithPublicationCommand` | EHS | Modulith application, through the starter |
+| `my-system-my-service-discard-modulith-publication` | `DiscardModulithPublicationCommand` | EHS | Modulith application, through the starter |
+
+```text
+Modulith application -- failure topic --> EHS
+Modulith application <-- retry topic ---- EHS
+Modulith application <-- discard topic -- EHS
+```
+
+### Configure the Modulith application
+
+Set these three properties under `jeap.modulith.error-handling`:
+
+| Property | Example value |
+|---|---|
+| `failure-event-topic` | `my-system-modulith-publication-processing-failed` |
+| `retry-command-topic` | `my-system-my-service-retry-modulith-publication` |
+| `discard-command-topic` | `my-system-my-service-discard-modulith-publication` |
+
+Grant the application's Kafka identity write access to the failure topic and read access to both command topics.
+Grant consumer-group access for the starter's command listeners, and the required Schema Registry access.
+Declare the two command consumer contracts shown in [Configuration](#configuration); the enabled starter checks them
+at startup. No application producer contract is required for the framework-owned failure event.
+
+### Configure the EHS
+
+Set the same failure topic on the EHS:
+
+```yaml
+jeap:
+  errorhandling:
+    modulithPublicationProcessingFailedTopic: my-system-modulith-publication-processing-failed
+```
+
+Grant the EHS's Kafka identity read and consumer-group access for the failure topic, write access to the retry/discard
+topics of its source services, and the required Schema Registry access. Application permissions do not grant EHS
+permissions: configure both identities. On RHOS these are the respective Kafka service bindings; on Nivel they are
+the respective MSK IAM permissions.
+
+The EHS needs no separate retry/discard topic properties: each failure event carries those destinations, which the
+EHS persists together with the source Kafka cluster. The EHS needs no additional contract annotations because it uses
+its existing `ErrorServiceContractValidator`. Roll out the configuration and restart the EHS to activate the listener
+before sending the first test failure. See the
+[EHS setup guide](https://github.com/jeap-admin-ch/jeap-error-handling/blob/main/docs/getting-started.md).
+
+### Existing topics and message signatures
+
+Keep the normal Kafka failure and dead-letter topics distinct from the Modulith failure topic. Existing permissions
+for normal error handling remain necessary, including EHS write access to business topics for Kafka-message resends.
+Internal application events stay inside Spring Modulith and do not require their own Kafka topics. The JME example's
+`jme-order-created-modulith` topic is only its business-input demonstration, not a requirement for using this starter.
+
+Contracts, Kafka permissions and message signatures are independent. If a receiver requires signatures, configure
+the sender's signing key/certificate and the receiver's certificate trust and publisher permissions. Check both
+directions: the application sends failures, and EHS sends commands. A producer-contract exemption does not exempt a
+message from signature validation. Restart an application when enabling previously unconfigured signing; do not rely
+on configuration refresh to create the signing service. See
+[message signing](https://github.com/jeap-admin-ch/jeap-messaging/blob/main/docs/signing-messages.md).
+
+### Verify the integration
+
+In a test environment, fail one persistent asynchronous listener, wait for retry exhaustion, and inspect the error
+and payload in the EHS UI. Retry the publication, then discard its latest failure if it fails again. Confirm that only
+that publication is affected and discard causes no further listener invocation. For a shared EHS, use a unique test
+identifier and leave other applications' errors untouched.
+
 ## Configuration
 
 The starter is enabled by default when it is on the classpath. It can be disabled explicitly:
