@@ -57,6 +57,7 @@ class ModulithPublicationEscalationIT extends ModulithErrorHandlingITBase {
         assertThat(event.getPayload().getRetryCommandTopicName()).isEqualTo(properties.getRetryCommandTopic());
         assertThat(event.getPayload().getDiscardCommandTopicName()).isEqualTo(properties.getDiscardCommandTopic());
         assertThat(event.getPayload().getStackTrace()).contains("ShipmentFailedException");
+        assertThat(event.getPayload().getStackTraceHash()).hasSize(8);
     }
 
     @Test

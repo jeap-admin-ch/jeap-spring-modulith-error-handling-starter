@@ -1,6 +1,8 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
 import ch.admin.bit.jeap.messaging.kafka.contract.ContractsValidator;
+import ch.admin.bit.jeap.messaging.kafka.properties.KafkaProperties;
+import ch.admin.bit.jeap.messaging.kafka.properties.KafkaPropertiesConfiguration;
 import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutbox;
 import ch.admin.bit.jeap.modulith.command.discardpublication.DiscardModulithPublicationCommand;
 import ch.admin.bit.jeap.modulith.command.retrypublication.RetryModulithPublicationCommand;
@@ -34,6 +36,7 @@ import javax.sql.DataSource;
  * Auto-configuration entry point for Spring Modulith publication error handling.
  */
 @AutoConfiguration(
+        after = KafkaPropertiesConfiguration.class,
         afterName = "org.springframework.modulith.events.jdbc.JdbcEventPublicationAutoConfiguration",
         before = EventPublicationAutoConfiguration.class)
 @ConditionalOnClass(EventPublicationRepository.class)
@@ -100,9 +103,10 @@ public class ModulithErrorHandlingAutoConfiguration {
             ModulithErrorHandlingProperties properties,
             PlatformTransactionManager transactionManager,
             Environment environment,
-            Clock modulithErrorHandlingClock) {
+            Clock modulithErrorHandlingClock,
+            KafkaProperties kafkaProperties) {
         return new ModulithPublicationEscalationService(repository, outbox, properties, transactionManager,
-                environment, modulithErrorHandlingClock);
+                environment, modulithErrorHandlingClock, kafkaProperties);
     }
 
     @Bean

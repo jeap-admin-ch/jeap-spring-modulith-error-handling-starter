@@ -1,5 +1,6 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
+import ch.admin.bit.jeap.messaging.kafka.properties.KafkaProperties;
 import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutbox;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -36,7 +37,8 @@ class ModulithPublicationEscalationServiceTest {
         when(repository.lockFailed(stale.publicationId(), stale.completionAttempts()))
                 .thenReturn(Optional.empty());
         ModulithPublicationEscalationService service = new ModulithPublicationEscalationService(
-                repository, outbox, properties, transactionManager, environment, Clock.systemUTC());
+                repository, outbox, properties, transactionManager, environment, Clock.systemUTC(),
+                new KafkaProperties());
 
         service.escalate(stale, null);
 

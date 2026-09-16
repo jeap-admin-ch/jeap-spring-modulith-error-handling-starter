@@ -1,6 +1,8 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
 import ch.admin.bit.jeap.domainevent.avro.AvroDomainEventBuilder;
+import ch.admin.bit.jeap.messaging.kafka.errorhandling.StackTraceHasher;
+import ch.admin.bit.jeap.messaging.kafka.properties.KafkaProperties;
 import ch.admin.bit.jeap.modulith.event.publicationprocessingfailed.ModulithPublicationProcessingFailedEvent;
 import ch.admin.bit.jeap.modulith.event.publicationprocessingfailed.ModulithPublicationProcessingFailedPayload;
 import ch.admin.bit.jeap.modulith.event.publicationprocessingfailed.ModulithPublicationProcessingFailedReferences;
@@ -10,10 +12,7 @@ import ch.admin.bit.jeap.modulith.event.publicationprocessingfailed.Temporality;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.HexFormat;
 
 final class ModulithPublicationFailureEventBuilder extends
         AvroDomainEventBuilder<ModulithPublicationFailureEventBuilder, ModulithPublicationProcessingFailedEvent> {
@@ -23,15 +22,20 @@ final class ModulithPublicationFailureEventBuilder extends
     private final PublicationFailure failure;
     private final Throwable exception;
     private final ModulithErrorHandlingProperties properties;
+    private final KafkaProperties kafkaProperties;
+    private final StackTraceHasher stackTraceHasher;
 
     ModulithPublicationFailureEventBuilder(String systemName, String serviceName, PublicationFailure failure,
-            Throwable exception, ModulithErrorHandlingProperties properties) {
+            Throwable exception, ModulithErrorHandlingProperties properties, KafkaProperties kafkaProperties,
+            StackTraceHasher stackTraceHasher) {
         super(ModulithPublicationProcessingFailedEvent::new);
         this.systemName = systemName;
         this.serviceName = serviceName;
         this.failure = failure;
         this.exception = exception;
         this.properties = properties;
+        this.kafkaProperties = kafkaProperties;
+        this.stackTraceHasher = stackTraceHasher;
         idempotenceId(failure.publicationId() + ":" + failure.completionAttempts());
     }
 
@@ -52,7 +56,7 @@ final class ModulithPublicationFailureEventBuilder extends
 
     @Override
     public ModulithPublicationProcessingFailedEvent build() {
-        String stackTrace = stackTrace(exception);
+        String stackTrace = truncate(stackTrace(exception), kafkaProperties.getErrorEventStackTraceMaxLength());
         byte[] serializedEvent = truncate(failure.serializedEvent(), properties.getMaxPayloadBytes());
 
         var payload = ModulithPublicationProcessingFailedPayload.newBuilder()
@@ -66,7 +70,10 @@ final class ModulithPublicationFailureEventBuilder extends
                 .setDiscardCommandTopicName(properties.getDiscardCommandTopic());
 
         if (stackTrace != null) {
-            payload.setStackTrace(stackTrace).setStackTraceHash(sha256(stackTrace));
+            payload.setStackTrace(stackTrace);
+            if (kafkaProperties.isErrorStackTraceHashEnabled()) {
+                payload.setStackTraceHash(stackTraceHasher.hash(exception));
+            }
         }
         if (serializedEvent != null) {
             payload.setSerializedEvent(ByteBuffer.wrap(serializedEvent))
@@ -106,11 +113,10 @@ final class ModulithPublicationFailureEventBuilder extends
         return payload.length <= maxPayloadBytes ? payload : Arrays.copyOf(payload, maxPayloadBytes);
     }
 
-    private static String sha256(String value) {
-        try {
-            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(value.getBytes()));
-        } catch (NoSuchAlgorithmException exception) {
-            throw new IllegalStateException("SHA-256 must be available", exception);
+    private static String truncate(String stackTrace, int maxLength) {
+        if (stackTrace == null || stackTrace.length() <= maxLength) {
+            return stackTrace;
         }
+        return stackTrace.substring(0, maxLength) + "...";
     }
 }

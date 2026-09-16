@@ -1,5 +1,7 @@
 package ch.admin.bit.jeap.modulith.errorhandling;
 
+import ch.admin.bit.jeap.messaging.kafka.errorhandling.StackTraceHasher;
+import ch.admin.bit.jeap.messaging.kafka.properties.KafkaProperties;
 import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutbox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +23,8 @@ final class ModulithPublicationEscalationService {
     private final ModulithErrorHandlingProperties properties;
     private final TransactionTemplate transactionTemplate;
     private final Clock clock;
+    private final KafkaProperties kafkaProperties;
+    private final StackTraceHasher stackTraceHasher;
     private final String systemName;
     private final String serviceName;
 
@@ -29,7 +33,8 @@ final class ModulithPublicationEscalationService {
             ModulithErrorHandlingProperties properties,
             PlatformTransactionManager transactionManager,
             Environment environment,
-            Clock clock) {
+            Clock clock,
+            KafkaProperties kafkaProperties) {
         this.repository = repository;
         this.outbox = outbox;
         this.properties = properties;
@@ -37,6 +42,8 @@ final class ModulithPublicationEscalationService {
         // A synchronous AFTER_COMMIT listener still has the already-completed publisher transaction's resources bound.
         this.transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         this.clock = clock;
+        this.kafkaProperties = kafkaProperties;
+        this.stackTraceHasher = new StackTraceHasher(kafkaProperties);
         this.systemName = environment.getRequiredProperty("jeap.messaging.kafka.systemName");
         this.serviceName = environment.getProperty("jeap.messaging.kafka.serviceName",
                 environment.getRequiredProperty("spring.application.name"));
@@ -58,7 +65,7 @@ final class ModulithPublicationEscalationService {
 
     private void recordEscalation(PublicationFailure failure, Throwable exception) {
         var event = new ModulithPublicationFailureEventBuilder(
-                systemName, serviceName, failure, exception, properties).build();
+                systemName, serviceName, failure, exception, properties, kafkaProperties, stackTraceHasher).build();
         String eventId = event.getIdentity().getEventId();
         if (!repository.recordEscalation(failure, eventId, clock.instant())) {
             return;

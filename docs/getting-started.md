@@ -125,6 +125,12 @@ jeap:
       discard-command-topic: my-system-my-service-discard-modulith-publication
 ```
 
+Failure events use the standard jEAP Messaging stack-trace settings under `jeap.messaging.kafka`. Hashing is enabled by
+default and uses `errorStackTraceHashDefaultExclusionPatterns` plus
+`errorStackTraceHashAdditionalExclusionPatterns`; disable it with `errorStackTraceHashEnabled=false`. The displayed
+stack trace is limited by `errorEventStackTraceMaxLength`, which defaults to 7000 characters. The hash is calculated
+from the full exception before the displayed stack trace is truncated.
+
 The application must declare consumer contracts for both commands, with topics matching the configuration above:
 
 ```java

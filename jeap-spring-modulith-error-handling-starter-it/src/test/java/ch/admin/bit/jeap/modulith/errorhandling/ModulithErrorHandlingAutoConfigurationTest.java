@@ -4,6 +4,7 @@ import ch.admin.bit.jeap.messaging.contract.v2.Contract;
 import ch.admin.bit.jeap.messaging.kafka.contract.ContractsValidator;
 import ch.admin.bit.jeap.messaging.kafka.contract.DefaultContractsValidator;
 import ch.admin.bit.jeap.messaging.kafka.contract.NoContractException;
+import ch.admin.bit.jeap.messaging.kafka.properties.KafkaPropertiesConfiguration;
 import ch.admin.bit.jeap.messaging.transactionaloutbox.outbox.TransactionalOutbox;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
@@ -37,7 +38,8 @@ class ModulithErrorHandlingAutoConfigurationTest {
                     .messageTypeName("DiscardModulithPublicationCommand").topics(new String[]{"discard"}).build()));
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(ModulithErrorHandlingAutoConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(
+                    KafkaPropertiesConfiguration.class, ModulithErrorHandlingAutoConfiguration.class))
             .withBean(ContractsValidator.class, () -> new DefaultContractsValidator("test-service", () -> commandContracts))
             .withBean("applicationLockProvider", LockProvider.class, () -> applicationLockProvider)
             .withBean(JdbcTemplate.class, () -> mock(JdbcTemplate.class))
