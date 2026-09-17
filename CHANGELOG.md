@@ -16,6 +16,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Update parent from 9.7.0 to 9.7.1
 - update jeap-spring-boot-vault-starter from 25.5.0 to 25.6.0
 - Configure the AWS JDBC Wrapper's HikariCP exception override so recoverable failover connections are not evicted.
+- update jeap-messaging-outbox from 17.19.0 to 18.6.0
+- update jeap-messaging from 19.4.0 to 19.5.0
 
 ## [1.10.1] - 2026-09-16
 
