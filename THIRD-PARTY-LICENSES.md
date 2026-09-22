@@ -72,6 +72,7 @@ Apache License Version 2.0
  * micrometer-commons - [io.micrometer:micrometer-commons](https://github.com/micrometer-metrics/micrometer-commercial)
  * micrometer-observation - [io.micrometer:micrometer-observation](https://github.com/micrometer-metrics/micrometer-commercial)
  * Jakarta Dependency Injection - [jakarta.inject:jakarta.inject-api](https://github.com/eclipse-ee4j/injection-api)
+ * Bean Validation API - [javax.validation:validation-api](http://beanvalidation.org)
  * Byte Buddy (without dependencies) - [net.bytebuddy:byte-buddy](https://bytebuddy.net/byte-buddy)
  * Byte Buddy agent - [net.bytebuddy:byte-buddy-agent](https://bytebuddy.net/byte-buddy-agent)
  * Java Native Access - [net.java.dev.jna:jna](https://github.com/java-native-access/jna)
@@ -125,7 +126,6 @@ Apache License Version 2.0
  * Kotlin Stdlib - [org.jetbrains.kotlin:kotlin-stdlib](https://kotlinlang.org/)
  * Kotlin Stdlib Jdk7 - [org.jetbrains.kotlin:kotlin-stdlib-jdk7](https://kotlinlang.org/)
  * Kotlin Stdlib Jdk8 - [org.jetbrains.kotlin:kotlin-stdlib-jdk8](https://kotlinlang.org/)
- * kotlinx-serialization-core - [org.jetbrains.kotlinx:kotlinx-serialization-core-jvm](https://github.com/Kotlin/kotlinx.serialization)
  * jMolecules - Events - [org.jmolecules:jmolecules-events](https://github.com/xmolecules/jmolecules/jmolecules-events)
  * jMolecules - Stereotype - [org.jmolecules:jstereotype](https://github.com/xmolecules/jmolecules/jstereotype)
  * JSpecify annotations - [org.jspecify:jspecify](https://jspecify.dev/)
@@ -319,6 +319,7 @@ MIT License
 -------------------------------
 
  * minimal-json - [com.eclipsesource.minimal-json:minimal-json](https://github.com/ralfstx/minimal-json)
+ * mbknor-jackson-jsonSchema - [com.kjetland:mbknor-jackson-jsonschema_2.13](https://github.com/mbknor/mbknor-jackson-jsonSchema)
  * ClassGraph - [io.github.classgraph:classgraph](https://github.com/classgraph/classgraph)
  * Logstash Logback Encoder - [net.logstash.logback:logstash-logback-encoder](https://github.com/logfellow/logstash-logback-encoder)
  * JOpt Simple - [net.sf.jopt-simple:jopt-simple](http://jopt-simple.github.io/jopt-simple)
