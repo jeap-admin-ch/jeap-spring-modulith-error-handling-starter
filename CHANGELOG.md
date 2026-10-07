@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.21.1] - 2026-10-07
+
+### Added
+- Architecture documentation: a diagram of how a failed Spring Modulith publication reaches an operator and comes
+  back, showing the boundary between the application's own tables and the jEAP Error Handling Service's. The
+  diagram is kept as a draw.io source next to the SVG exported from it, `docs/images/failed-publication-flow.drawio`
+  and `.svg`; edit the source, export it over the SVG and commit both files. The build refuses a source that was
+  committed without re-exporting its image.
+
 ## [1.21.0] - 2026-10-07
 ### Changed
 - update jeap-messaging from 19.14.0 to 19.15.0

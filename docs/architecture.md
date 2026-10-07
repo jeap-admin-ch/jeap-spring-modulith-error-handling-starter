@@ -3,6 +3,12 @@
 The starter runs inside the application that owns the Spring Modulith `event_publication` table. It is separate from the
 jEAP Error Handling Service, which stores operational errors in its own database.
 
+![How a failed publication reaches an operator and comes back](images/failed-publication-flow.svg)
+
+The two databases and the transactional outbox between them are what the rest of this page is about: everything on the
+left of the picture happens in the application's own transaction and its own tables, and the only thing that crosses the
+boundary is a message.
+
 ## Supported listeners
 
 Version 1 supports persistent Spring Modulith `AFTER_COMMIT` publications for both execution models:

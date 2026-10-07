@@ -38,6 +38,12 @@ The Java baseline and Spring Boot version are inherited from
 - Production database migrations are owned by the consuming service; this repository provides documented reference DDL.
 - Prefer real PostgreSQL and Kafka integration tests over mocks for persistence and messaging guarantees.
 - Keep README and `docs/` synchronized with configuration and behavior changes.
+- Diagrams under `docs/` are kept as **two committed files in one folder**: the draw.io source
+  (`images/<name>.drawio`) and the SVG exported from it by hand (`images/<name>.svg`), which is what the page
+  embeds. Edit the source in [draw.io](https://www.drawio.com/), export it over the SVG next to it and commit
+  both. Never edit the SVG by hand, and never commit an SVG without its source: the build refuses a source that
+  was committed after its image, because the documentation would otherwise go on showing the old picture. The
+  `.drawio` itself is not published - only the SVG reaches the documentation site.
 
 ## Versioning
 
