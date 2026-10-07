@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - update jeap-messaging from 19.14.0 to 19.15.0
 - Generate and upload Avro schemas with message contracts without executing message classes, avoiding registry access in the Message Contract Service. Schema generation and upload can be disabled independently.
+- update jeap-messaging-outbox from 18.15.0 to 18.16.0
 
 ## [1.20.0] - 2026-10-05
 ### Changed
