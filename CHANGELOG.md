@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - update jeap-messaging from 19.15.1 to 19.15.2
 - Removed the duplicated processing round cleanup in the contract annotation processors without changing their behaviour.
+- update jeap-messaging-outbox from 18.16.1 to 18.16.2
 
 ## [1.21.2] - 2026-10-08
 ### Changed
