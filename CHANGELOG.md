@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - update jeap-messaging from 19.15.0 to 19.15.1
 - Clean up the contract annotation processors and the schema extraction without changing their behaviour: no longer catch `Error`, and reduce the complexity of the schema classfile and source readers.
+- update jeap-messaging-outbox from 18.16.0 to 18.16.1
 
 ## [1.21.1] - 2026-10-07
 
