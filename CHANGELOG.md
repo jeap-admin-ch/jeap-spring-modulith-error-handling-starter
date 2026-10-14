@@ -9,6 +9,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 - update jeap-messaging from 19.17.0 to 19.17.1
 - Consolidate error-handling documentation and configuration, preserve consumer safety guidance, and link service setup to the EHS documentation.
+- update jeap-messaging-outbox from 18.18.0 to 18.18.1
 
 ## [1.23.0] - 2026-10-13
 
