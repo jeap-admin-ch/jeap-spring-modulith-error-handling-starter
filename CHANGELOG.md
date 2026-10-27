@@ -10,6 +10,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - update jeap-messaging from 19.22.0 to 19.23.0
 - Classify a database failover with the AWS Advanced JDBC Wrapper (`SQLException` with SQLState `08S02`) as
   `TEMPORARY`, also when it is wrapped, e.g. in a `DataAccessResourceFailureException`.
+- update jeap-messaging-outbox from 18.23.0 to 18.24.0
 
 ## [1.28.0] - 2026-10-26
 
