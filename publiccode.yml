@@ -2,7 +2,7 @@ publiccodeYmlVersion: 0.4.0
 name: jeap-spring-modulith-error-handling-starter
 applicationSuite: jEAP
 softwareVersion: 1.37.0
-releaseDate: 2026-11-09
+releaseDate: 2026-11-10
 url: "https://github.com/jeap-admin-ch/jeap-spring-modulith-error-handling-starter.git"
 landingURL: "https://github.com/jeap-admin-ch/jeap"
 platforms:
