@@ -12,6 +12,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   using the idempotent message handler, configuring error handling, updating the message type registry,
   enabling message signing, switching from Confluent to AWS Glue + MSK IAM authentication, and evolving
   a self-consumed message type
+- update jeap-messaging-outbox from 18.34.0 to 18.34.1
 
 ## [1.39.0] - 2026-11-14
 
