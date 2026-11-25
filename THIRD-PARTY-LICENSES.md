@@ -187,7 +187,7 @@ Apache License Version 2.0
  * spring-security-crypto - [org.springframework.security:spring-security-crypto](https://spring.io/projects/spring-security)
  * snappy-java - [org.xerial.snappy:snappy-java](https://github.com/xerial/snappy-java)
  * org.xmlunit:xmlunit-core - [org.xmlunit:xmlunit-core](https://www.xmlunit.org/)
- * SnakeYAML - [org.yaml:snakeyaml](https://bitbucket.org/snakeyaml/snakeyaml)
+ * SnakeYAML - [org.yaml:snakeyaml](https://codeberg.org/snakeyaml/snakeyaml)
  * AWS Java SDK :: Annotations - [software.amazon.awssdk:annotations](https://aws.amazon.com/sdkforjava/core/annotations)
  * AWS Java SDK :: Arns - [software.amazon.awssdk:arns](https://aws.amazon.com/sdkforjava)
  * AWS Java SDK :: Auth - [software.amazon.awssdk:auth](https://aws.amazon.com/sdkforjava)
@@ -252,7 +252,9 @@ BSD License 3
 Bouncy Castle Licence
 -------------------------------
 
+ * Bouncy Castle PKIX, CMS, EAC, TSP, PKCS, OCSP, CMP, and CRMF APIs - [org.bouncycastle:bcpkix-jdk18on](https://www.bouncycastle.org/download/bouncy-castle-java/)
  * Bouncy Castle Provider - [org.bouncycastle:bcprov-jdk18on](https://www.bouncycastle.org/download/bouncy-castle-java/)
+ * Bouncy Castle ASN.1 Extension and Utility APIs - [org.bouncycastle:bcutil-jdk18on](https://www.bouncycastle.org/download/bouncy-castle-java/)
 
 EPL-2.0
 -------------------------------
