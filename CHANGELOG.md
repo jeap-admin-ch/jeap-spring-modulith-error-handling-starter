@@ -18,6 +18,7 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `server.forward-headers-strategy=NATIVE`), and only if the application sets neither of the two properties itself,
   so an application's own setting of either property is respected (Spring Boot refuses to start if both are set).
   The `server.tomcat.use-relative-redirects=true` default was dropped, as Spring Boot defaults to relative redirects.
+- update jeap-messaging-outbox from 18.37.0 to 18.38.0
 
 ## [1.42.0] - 2026-11-21
 
